@@ -1,15 +1,26 @@
 import { Given, Then } from "@wdio/cucumber-framework";
 import { expect } from "@wdio/globals";
-import { PageFactory } from "../pages/page-factory";
+import { PageName, PageFactory } from "../pages/page-factory";
 import { getRegisteredUser } from "../utils/user.generator";
 import MyAccountPage from "../pages/myAccount.page";
+import { Page } from "../pages/page.page";
 
+let currentPage: Page;
 let myAccountPage: MyAccountPage;
 
-Given("I am logged in as a registered user", async () => {
-  myAccountPage = PageFactory.myAccountPage();
-  await myAccountPage.loginAsRegisteredUser();
-});
+Given(
+  /^I am on the "([^"]+)" page as a registered user$/,
+  async (pageTitle: string) => {
+    const page = PageFactory.getPage(pageTitle as PageName);
+    currentPage = page;
+    await currentPage.open();
+
+    if (pageTitle === PageName.myAccount) {
+      myAccountPage = page as MyAccountPage;
+    }
+    await myAccountPage.loginAsRegisteredUser();
+  }
+);
 
 Then("the heading should be visible", async () => {
   const isVisible = await myAccountPage.isHeadingLoaded();

@@ -1,14 +1,21 @@
 import { Given, When, Then } from "@wdio/cucumber-framework";
 import { expect } from "@wdio/globals";
-import { PageFactory } from "../pages/page-factory";
+import { PageName, PageFactory } from "../pages/page-factory";
 import { generateUniqueUser, getRegisteredUser } from "../utils/user.generator";
 import CreateAccountPage from "../pages/createAccount.page";
+import { Page } from "../pages/page.page";
 
+let currentPage: Page;
 let createAccountPage: CreateAccountPage;
 
-Given('I am on the "Create New Customer Account" page', async () => {
-  createAccountPage = PageFactory.createAccountPage();
-  await createAccountPage.open();
+Given(/^I am on the "([^"]+)" page$/, async (pageTitle: string) => {
+  const page = PageFactory.getPage(pageTitle as PageName);
+  currentPage = page;
+  await currentPage.open();
+
+  if (pageTitle === PageName.customerAccount) {
+    createAccountPage = page as CreateAccountPage;
+  }
 });
 
 When("I fill the registration form with valid data", async () => {
