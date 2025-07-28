@@ -22,9 +22,7 @@ export const config: WebdriverIO.Config = {
     // The path of the spec files will be resolved relative from the directory of
     // of the config file unless it's absolute.
     //
-    specs: [
-        // ToDo: define location for spec files here
-    ],
+    specs: ['./features/**/*.feature'],
     // Patterns to exclude.
     exclude: [
         // 'path/to/excluded/files'
@@ -62,7 +60,7 @@ export const config: WebdriverIO.Config = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'info',
+    logLevel: 'error',
     //
     // Set specific log levels per logger
     // loggers:
@@ -86,7 +84,7 @@ export const config: WebdriverIO.Config = {
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
-    // baseUrl: 'http://localhost:8080',
+    baseUrl: (process.env.BASE_URL || ""),
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,
@@ -130,7 +128,7 @@ export const config: WebdriverIO.Config = {
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        require: [''],
+        require: ['./steps/**/*.ts', './pages/**/*.ts', './features/support/hooks.ts'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
